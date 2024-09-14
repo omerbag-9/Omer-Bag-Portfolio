@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom'
 export default function Projects() {
   return <>
     <div className="row g-5 margin-top-mobile ms-1">
-      <div className=" col-md-6 experience justify-content-center">
-        <div className="dark-color rounded p-4 border-main">
+      <div className=" col-lg-6 experience justify-content-center">
+        <div className="dark-color rounded p-4 experience border-main">
         <img className='w-100' src={ecommerce} alt="" />
         <ul className='my-4'>
           <li className='text-white '>
@@ -32,8 +32,8 @@ export default function Projects() {
         </div>
       </div>
       {/* ecommerce */}
-      <div className=" col-md-6 experience justify-content-center">
-        <div className="dark-color rounded p-4 border-main">
+      <div className=" col-lg-6 experience justify-content-center">
+        <div className="dark-color rounded  experience p-4 border-main">
         <img className='w-100' src={Yummy} alt="" />
         <ul className='my-4'>
           <li className='text-white '>
@@ -56,8 +56,8 @@ export default function Projects() {
         
       </div>
       {/* Yummy */}
-      <div className=" col-md-6 experience justify-content-center">
-        <div className=" dark-color rounded p-4 border-main">
+      <div className=" col-lg-6 experience justify-content-center">
+        <div className=" dark-color experience rounded p-4 border-main">
         <img className='w-100' src={Daniels} alt="" />
         <ul className='my-4'>
           <li className='text-white '>
@@ -79,8 +79,8 @@ export default function Projects() {
         
       </div>
       {/* Daniels */}
-      <div className=" col-md-6 experience justify-content-center">
-        <div className="dark-color rounded p-4 border-main">
+      <div className=" col-lg-6 experience justify-content-center">
+        <div className="dark-color experience rounded p-4 border-main">
         <img className='w-100' src={mealify} alt="" />
         <ul className='my-4'>
           <li className='text-white '>
@@ -101,8 +101,8 @@ export default function Projects() {
         
       </div>
       {/* mealify */}
-      <div className=" col-md-6 experience justify-content-center">
-        <div className="dark-color rounded p-4 border-main">
+      <div className=" col-lg-6 experience justify-content-center">
+        <div className="dark-color experience rounded p-4 border-main">
         <img className='w-100' src={Fokir} alt="" />
         <ul className='my-4'>
           <li className='text-white '>

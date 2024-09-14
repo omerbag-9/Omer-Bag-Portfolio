@@ -16,8 +16,8 @@ export default function Home() {
     <div className="">
       <h1 className='text-main p-2 text-center'>full-stack Developer</h1>
       <div className="light-box m-auto position-absolute start-50 top-50 z-n1"></div>
-      <div className="row g-5">
-        <div className="col-md-6 experience">
+      <div className="row g-5 justify-content-center">
+        <div className="col-lg-6 experience ">
 
           <div className="row g-2 justify-content-center">
             <div className="col-md-6">
