@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -155,4 +156,35 @@ ul li:hover .contact{
   background: -webkit-linear-gradient(#ffffff, #f69b32);
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+
+@media screen and (max-width: 576px) {
+  .container{
+    width: 100% !important;
+    padding: 0px !important;
+  }
+  .experience{
+    padding: 0px !important;
+  }
+  .skills{
+    width: 50% !important;
+  }
+  .margin-top-mobile{
+    margin-top: 25px !important;
+  }
+  .w-mobile-100{
+    width: 100% !important;
+  }
+  .p-mobile{
+    padding: 10px !important;
+  }
+  .mobile-col-3{
+    max-width: 25% !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+  .mobile-evenly{
+    justify-content: space-evenly !important;
+  }
 }

@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom'
 
 export default function Projects() {
   return <>
-    <div className="row g-5 ms-1">
-      <div className=" col-md-6 ">
+    <div className="row g-5 margin-top-mobile ms-1">
+      <div className=" col-md-6 experience justify-content-center">
         <div className="dark-color rounded p-4 border-main">
         <img className='w-100' src={ecommerce} alt="" />
         <ul className='my-4'>
@@ -22,17 +22,17 @@ export default function Projects() {
           </li>
         </ul>
         <div className="row justify-content-between">
-          <div className="col-md-6">
+          <div className="col-md-6 experience">
             <span className='text-white fs-5 text-start'>E-Commerce</span>
           </div>
           <div className="col-md-6 text-end">
-            <Link to={"https://omerbag-9.github.io/E-commerce/#/"} target='_blank' className='text-white fs-5'>Go to Website <i class="fa-solid fa-arrow-up-right-from-square fs-6 text-white"></i></Link>
+            <Link to={"https://omerbag-9.github.io/E-commerce-frontend/"} target='_blank' className='text-white fs-5'>Go to Website <i class="fa-solid fa-arrow-up-right-from-square fs-6 text-white"></i></Link>
           </div>
         </div>
         </div>
       </div>
       {/* ecommerce */}
-      <div className=" col-md-6 ">
+      <div className=" col-md-6 experience justify-content-center">
         <div className="dark-color rounded p-4 border-main">
         <img className='w-100' src={Yummy} alt="" />
         <ul className='my-4'>
@@ -56,7 +56,7 @@ export default function Projects() {
         
       </div>
       {/* Yummy */}
-      <div className=" col-md-6">
+      <div className=" col-md-6 experience justify-content-center">
         <div className=" dark-color rounded p-4 border-main">
         <img className='w-100' src={Daniels} alt="" />
         <ul className='my-4'>
@@ -79,7 +79,7 @@ export default function Projects() {
         
       </div>
       {/* Daniels */}
-      <div className=" col-md-6 ">
+      <div className=" col-md-6 experience justify-content-center">
         <div className="dark-color rounded p-4 border-main">
         <img className='w-100' src={mealify} alt="" />
         <ul className='my-4'>
@@ -101,7 +101,7 @@ export default function Projects() {
         
       </div>
       {/* mealify */}
-      <div className=" col-md-6 ">
+      <div className=" col-md-6 experience justify-content-center">
         <div className="dark-color rounded p-4 border-main">
         <img className='w-100' src={Fokir} alt="" />
         <ul className='my-4'>

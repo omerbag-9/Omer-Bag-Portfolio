@@ -7,10 +7,10 @@ export default function Contacts() {
       <div className="w-75 pt-5">
       <h1 className='text-white'>Contact me</h1>
       </div>
-    <div className="contact w-75 dark-color m-auto border-main rounded p-4">
+    <div className="contact w-mobile-100 p-mobile w-75 dark-color m-auto border-main rounded p-4">
       <div className="gmail mb-4">
       <i class="fa-regular fa-envelope text-main mx-2 fs-3"></i>
-      <Link to={"https://mail.google.com/mail/?view=cm&fs=1&to=omerbagprog@gmail.com&su=SUBJECT"} target='_blank' className='fs-3'>Email : <u>omerbagprog@gmail.com</u></Link>
+      <Link to={"https://mail.google.com/mail/?view=cm&fs=1&to=omerbagprog@gmail.com&su=SUBJECT"} target='_blank' className='fs-5'>Email : <u>omerbagprog@gmail.com</u></Link>
       </div>
       <div className="LinkedIn mb-4">
       <i class="fa-brands fa-linkedin text-main mx-2 fs-3"></i>
