@@ -17,10 +17,6 @@ export default function Hero() {
       </div>
 
       <div className="hero__inner">
-        <p className="hero__hello">
-          <span className="dot" /> Available for freelance projects
-        </p>
-
         <h1 className="hero__title" id="hero-title">
           <SplitText
             text="Omer Mustafa"
