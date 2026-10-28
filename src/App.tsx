@@ -1,71 +1,68 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ClickSpark from './bits/ClickSpark';
+import StaggeredMenu from './bits/StaggeredMenu';
 import Hero from './sections/Hero';
-import Intro from './sections/Intro';
-import Work from './sections/Work';
+import About from './sections/About';
 import Services from './sections/Services';
-import Skills from './sections/Skills';
-import Process from './sections/Process';
-import Proof from './sections/Proof';
+import Work from './sections/Work';
+import AiSkills from './sections/AiSkills';
+import Stack from './sections/Stack';
+import GitHub from './sections/GitHub';
+import Experience from './sections/Experience';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import { contact } from './data';
 
-function Nav() {
-  const [hidden, setHidden] = useState(false);
+const menu = [
+  { label: 'Home', ariaLabel: 'Back to the top', link: '#top' },
+  { label: 'Work', ariaLabel: 'Selected client work', link: '#work' },
+  { label: 'Services', ariaLabel: 'What I do', link: '#services' },
+  { label: 'AI skills', ariaLabel: 'How I use AI', link: '#ai' },
+  { label: 'GitHub', ariaLabel: 'Live GitHub activity', link: '#github' },
+  { label: 'Experience', ariaLabel: 'Experience and education', link: '#experience' },
+  { label: 'Contact', ariaLabel: 'Contact me', link: '#contact' }
+];
 
-  // Hide on the way down, return on the way up.
+const socials = [
+  { label: 'LinkedIn', link: contact.linkedin },
+  { label: 'GitHub', link: contact.github },
+  { label: 'Email', link: `mailto:${contact.email}` }
+];
+
+export default function App() {
+  // The wordmark only belongs on the hero; past it, the menu button alone stays fixed.
   useEffect(() => {
-    let last = window.scrollY;
-    const on = () => {
-      const y = window.scrollY;
-      setHidden(y > 400 && y > last);
-      last = y;
-    };
+    const on = () => document.documentElement.classList.toggle('scrolled', window.scrollY > 240);
+    on();
     window.addEventListener('scroll', on, { passive: true });
     return () => window.removeEventListener('scroll', on);
   }, []);
 
   return (
-    <header className="nav" data-hidden={hidden}>
-      <a className="nav__mark" href="#top">
-        Omer Mustafa<span>.</span>
-      </a>
-      <a className="nav__mono" href="#top" aria-label="Omer Mustafa, back to top">
-        OM
-      </a>
-      <nav className="nav__links" aria-label="Main">
-        <a className="link" href="#work">
-          Work
-        </a>
-        <a className="link" href="#services">
-          Services
-        </a>
-        <a className="link" href="#ai">
-          AI skills
-        </a>
-        <a className="link" href="#contact">
-          Contact
-        </a>
-        <a className="btn" href="#process">
-          Start a project
-        </a>
-      </nav>
-    </header>
-  );
-}
-
-export default function App() {
-  return (
-    <ClickSpark sparkColor="#e0261e" sparkCount={9} sparkRadius={22} sparkSize={9} duration={420}>
-      <Nav />
+    <ClickSpark sparkColor="#e5261f" sparkCount={9} sparkRadius={22} sparkSize={9} duration={420}>
+      <StaggeredMenu
+        isFixed
+        position="right"
+        items={menu}
+        socialItems={socials}
+        displaySocials
+        displayItemNumbering
+        colors={['#3a0907', '#e5261f']}
+        accentColor="#e5261f"
+        menuButtonColor="#f1f0ee"
+        openMenuButtonColor="#f1f0ee"
+        changeMenuColorOnOpen
+        closeOnClickAway
+      />
       <main>
         <Hero />
-        <Intro />
-        <Work />
+        <About />
         <Services />
-        <Skills />
-        <Process />
-        <Proof />
+        <Work />
+        <AiSkills />
+        <Stack />
+        <GitHub />
+        <Experience />
         <Contact />
       </main>
       <Footer />

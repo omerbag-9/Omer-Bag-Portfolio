@@ -1,55 +1,62 @@
 import { test, expect } from '@playwright/test';
 
+// GitHub is fetched in the browser; stub it so the suite does not depend on the network.
+test.beforeEach(async ({ page }) => {
+  await page.route('https://api.github.com/**', (r) =>
+    r.fulfill({
+      json: [
+        {
+          id: 1,
+          name: 'Omer-Bag-Portfolio',
+          description: 'Portfolio',
+          html_url: 'https://github.com/omerbag-9/Omer-Bag-Portfolio',
+          homepage: null,
+          language: 'TypeScript',
+          stargazers_count: 0,
+          fork: false,
+          pushed_at: new Date().toISOString()
+        }
+      ]
+    })
+  );
+  await page.route('https://github-contributions-api.jogruber.de/**', (r) => r.fulfill({ status: 503 }));
+});
+
 test('first screen says who and what', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toContainText(/omer mustafa/i);
-  await expect(page.getByText('I build, test and deliver software for Canadian teams')).toBeInViewport();
-  await expect(page.locator('.hero__action .btn')).toBeInViewport();
+  await expect(page.getByText(/ISTQB-certified tester and technical delivery manager/).first()).toBeAttached();
+  await expect(page.getByRole('link', { name: /start a project/i })).toBeInViewport();
 });
 
-test('start a project reaches the router', async ({ page }) => {
+test('start a project reaches contact', async ({ page }) => {
   await page.goto('/');
-  await page.locator('.hero__action .btn').click();
-  await expect(page).toHaveURL(/#process$/);
-  await expect(page.getByLabel('Describe your project or problem')).toBeVisible();
+  await page.getByRole('link', { name: /start a project/i }).click();
+  await expect(page).toHaveURL(/#contact$/);
+  await expect(page.locator('#contact a[href^="mailto:omerbagprog@gmail.com"]')).toBeVisible();
 });
 
-test('every project opens its case notes', async ({ page }) => {
+test('all six projects are listed', async ({ page }) => {
   await page.goto('/');
-  const names = page.locator('.work__name');
-  const count = await names.count();
-  expect(count).toBe(6);
-  for (let i = 0; i < count; i++) {
-    await names.nth(i).click();
-    const dialog = page.locator('dialog.case');
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole('heading', { name: 'What I did' })).toBeVisible();
-    await dialog.getByRole('button', { name: 'Close' }).click();
-    await expect(dialog).toBeHidden();
-  }
+  await expect(page.locator('.project__title')).toHaveCount(6);
 });
 
-test('a brief routes to matching skills', async ({ page }) => {
-  await page.goto('/#process');
-  const brief = page.getByLabel('Describe your project or problem');
-  await brief.fill('We need Playwright automation and our ERP integration keeps dropping orders.');
-  const on = page.locator('.router__skill[data-on="true"]');
-  await expect(on.filter({ hasText: 'Automation' })).toHaveCount(1);
-  await expect(on.filter({ hasText: 'Integrations' })).toHaveCount(1);
-  await expect(page.locator('.router__plan li')).not.toHaveCount(0);
+test('menu opens and navigates', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /open menu/i }).click();
+  await page.locator('.sm-panel-item', { hasText: 'Experience' }).click();
+  await expect(page).toHaveURL(/#experience$/);
 });
 
-test('email draft carries the brief', async ({ page }) => {
-  await page.goto('/#process');
-  await page.getByLabel('Describe your project or problem').fill('Our releases keep breaking before launch.');
-  const href = await page.getByRole('link', { name: /send this brief/i }).getAttribute('href');
-  expect(href).toMatch(/^mailto:omerbagprog@gmail\.com\?/);
-  expect(decodeURIComponent(href!)).toContain('Our releases keep breaking before launch.');
+test('GitHub repositories load', async ({ page }) => {
+  await page.goto('/#github');
+  await expect(page.locator('.repo__name').first()).toContainText(/omer bag portfolio/i);
 });
 
 test('no horizontal scroll on a phone', async ({ browser }) => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await page.goto('/');
+  await page.waitForTimeout(500);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
   await page.close();
@@ -62,7 +69,6 @@ test('reduced motion keeps all content', async ({ browser }) => {
     () => [...document.querySelectorAll('.rv')].filter((e) => getComputedStyle(e).opacity !== '1').length
   );
   expect(hidden).toBe(0);
-  await expect(page.getByRole('heading', { name: 'Have a project?' })).toBeAttached();
   await page.close();
 });
 

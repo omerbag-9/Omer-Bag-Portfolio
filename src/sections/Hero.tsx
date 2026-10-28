@@ -1,101 +1,82 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Threads from '../bits/Threads';
 import SplitText from '../bits/SplitText';
+import RotatingText from '../bits/RotatingText';
+import CircularText from '../bits/CircularText';
 import Magnet from '../bits/Magnet';
-import { CodeShot, SkillShot, TestShot, UpdateShot } from '../fragments';
-import { reducedMotion } from '../hooks';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const panels = [
-  { step: 'Build', ground: '#0a0a0a', panel: '#1b1b1b', caption: 'the routing code behind the brief form on this page.', Shot: CodeShot },
-  { step: 'Test', ground: '#120d0c', panel: '#2a1412', caption: 'this site’s own Playwright suite, run on every push.', Shot: TestShot },
-  { step: 'Deliver', ground: '#0c0e10', panel: '#1a1f24', caption: 'the weekly update format I send every client.', Shot: UpdateShot },
-  { step: 'Automate', ground: '#100b0a', panel: '#33100d', caption: 'Skill Router, a Claude skill I wrote and published.', Shot: SkillShot }
-];
+import BlurText from '../bits/BlurText';
+import { contact } from '../data';
+import { useMedia } from '../hooks';
 
 export default function Hero() {
-  const root = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const items = gsap.utils.toArray<HTMLElement>('.panel', el);
-    const reduce = reducedMotion();
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: reduce ? false : 0.4,
-      onUpdate: (self) => {
-        const p = self.progress * (panels.length - 1);
-        items.forEach((item, i) => {
-          if (i === 0) return;
-          const local = gsap.utils.clamp(0, 1, (p - (i - 1)) / 0.85);
-          const shown = reduce ? (local > 0.5 ? 0 : 100) : 100 - local * 100;
-          item.style.clipPath = `inset(${shown}% 0 0 0)`;
-        });
-        const idx = Math.min(panels.length - 1, Math.floor(p + 0.5));
-        setActive(idx);
-      }
-    });
-    return () => st.kill();
-  }, []);
-
-  const current = panels[active];
+  const phone = useMedia('(max-width: 720px)');
 
   return (
-    <section className="hero" ref={root} aria-labelledby="hero-title" id="top">
-      <div className="hero__stage" style={{ ['--hero-ground' as string]: current.ground }}>
-        <h1 className="hero__title display" id="hero-title">
+    <section className="hero" id="top" aria-labelledby="hero-title">
+      <div className="hero__bg" aria-hidden="true">
+        <Threads color="#e5261f" amplitude={1.4} distance={0.3} enableMouseInteraction lineCount={phone ? 50 : 80} />
+      </div>
+
+      <div className="hero__inner">
+        <p className="hero__hello">
+          <span className="dot" /> Available for freelance projects
+        </p>
+
+        <h1 className="hero__title" id="hero-title">
           <SplitText
             text="Omer Mustafa"
             tag="span"
             splitType="chars"
-            mask
-            delay={35}
-            duration={1.1}
+            delay={40}
+            duration={1}
             ease="expo.out"
             trigger="load"
-            textAlign="center"
+            textAlign="left"
+            mask
           />
         </h1>
 
-        <div className="hero__panels">
-          {panels.map(({ step, panel, caption, Shot }) => (
-            <figure key={step} className="panel" style={{ ['--panel-ground' as string]: panel }}>
-              <Shot />
-              <figcaption className="panel__caption">
-                <b>{step}:</b> {caption}
-              </figcaption>
-            </figure>
-          ))}
+        <div className="hero__rotate" aria-label="I build, test, deliver and automate software">
+          <span aria-hidden="true">I</span>
+          <RotatingText
+            aria-hidden="true"
+            texts={['build', 'test', 'deliver', 'automate']}
+            mainClassName="hero__word"
+            staggerDuration={0.025}
+            staggerFrom="last"
+            rotationInterval={2200}
+            effect="slide"
+          />
+          <span aria-hidden="true">software.</span>
         </div>
 
-        <div className="hero__side">
-          <ul className="hero__steps" aria-label="What I do">
-            {panels.map((p, i) => (
-              <li key={p.step} data-on={i === active}>
-                {p.step}
-              </li>
-            ))}
-          </ul>
-          <p className="hero__lede">
-            I build, test and deliver software for Canadian teams, from the first requirement to launch day.
-          </p>
-        </div>
+        <BlurText
+          className="hero__lede"
+          text="Developer, ISTQB-certified tester and technical delivery manager. I work with Canadian teams from Cairo, from the first requirement to launch day."
+          delay={40}
+          animateBy="words"
+        />
 
-        <div className="hero__action">
-          <p>Based in Cairo. Working Toronto mornings.</p>
-          <Magnet padding={60} magnetStrength={3}>
-            <a className="btn" href="#process">
+        <div className="hero__actions">
+          <Magnet padding={50} magnetStrength={3}>
+            <a className="btn" href="#contact">
               Start a project <span className="arrow">→</span>
             </a>
           </Magnet>
+          <a className="btn btn--ghost" href="#work">
+            See my work
+          </a>
         </div>
       </div>
+
+      <a className="hero__badge" href="#about" aria-label="Scroll to about">
+        <CircularText text="SCROLL • BUILD • TEST • SHIP • " spinDuration={18} size={132} fontSize={13} color="#f1f0ee" />
+        <span className="hero__badge-arrow" aria-hidden="true">
+          ↓
+        </span>
+      </a>
+      <a className="sr-only" href={contact.cv}>
+        Download CV
+      </a>
     </section>
   );
 }
