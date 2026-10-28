@@ -11,15 +11,17 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 // and if that fails too the card hides itself.
 export default function Contributions() {
   const [days, setDays] = useState<Day[] | null>(null);
+  const [reported, setReported] = useState<number | null>(null);
   const [mode, setMode] = useState<'loading' | 'grid' | 'image' | 'hidden'>('loading');
 
   useEffect(() => {
     const ctrl = new AbortController();
     fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`, { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d: { contributions: Day[] }) => {
+      .then((d: { contributions: Day[]; total?: { lastYear?: number } }) => {
         if (!d.contributions?.length) throw new Error('empty');
         setDays(d.contributions);
+        if (typeof d.total?.lastYear === 'number') setReported(d.total.lastYear);
         setMode('grid');
       })
       .catch(() => !ctrl.signal.aborted && setMode('image'));
@@ -28,7 +30,8 @@ export default function Contributions() {
 
   if (mode === 'hidden') return null;
 
-  const total = days?.reduce((a, d) => a + d.count, 0) ?? 0;
+  // prefer the total the service reports (GitHub's own figure) over summing the days ourselves
+  const total = reported ?? days?.reduce((a, d) => a + d.count, 0) ?? 0;
   const pad = days ? new Date(days[0].date).getDay() : 0;
   const cells: (Day | null)[] = days ? [...Array(pad).fill(null), ...days] : [];
   const weeks = Math.ceil(cells.length / 7);
