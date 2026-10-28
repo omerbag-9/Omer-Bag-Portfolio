@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import SpotlightCard from '../bits/SpotlightCard';
 import { experience } from '../data';
 import { useReveal } from '../hooks';
+import Contributions from './Contributions';
 
 export default function Experience() {
   const root = useRef<HTMLElement>(null);
@@ -16,6 +17,7 @@ export default function Experience() {
         <p className="section-sub">
           Speaking Arabic, English and Turkish. Comfortable in a client call, a code review or a test report.
         </p>
+        <Contributions />
       </div>
       <ol className="timeline">
         {experience.map((e, i) => (
