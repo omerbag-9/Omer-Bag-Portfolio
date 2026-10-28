@@ -19,7 +19,6 @@ npm test          # Playwright suite (builds and serves the site first)
 
 - `src/data.ts` — every fact on the page: contact details, stats, the six client projects, experience.
 - `src/sections/` — one file per section, in page order.
-- `src/sections/GitHub.tsx` — live repositories and contribution graph, fetched in the visitor's browser.
 - `tests/site.spec.ts` — the Playwright suite run in CI.
 
 ## Deploy

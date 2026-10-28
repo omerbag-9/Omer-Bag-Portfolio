@@ -7,7 +7,6 @@ import Services from './sections/Services';
 import Work from './sections/Work';
 import AiSkills from './sections/AiSkills';
 import Stack from './sections/Stack';
-import GitHub from './sections/GitHub';
 import Experience from './sections/Experience';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
@@ -18,7 +17,6 @@ const menu = [
   { label: 'Work', ariaLabel: 'Selected client work', link: '#work' },
   { label: 'Services', ariaLabel: 'What I do', link: '#services' },
   { label: 'AI skills', ariaLabel: 'How I use AI', link: '#ai' },
-  { label: 'GitHub', ariaLabel: 'Live GitHub activity', link: '#github' },
   { label: 'Experience', ariaLabel: 'Experience and education', link: '#experience' },
   { label: 'Contact', ariaLabel: 'Contact me', link: '#contact' }
 ];
@@ -61,7 +59,6 @@ export default function App() {
         <Work />
         <AiSkills />
         <Stack />
-        <GitHub />
         <Experience />
         <Contact />
       </main>
