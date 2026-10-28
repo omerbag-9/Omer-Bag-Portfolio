@@ -25,3 +25,13 @@ npm test          # Playwright suite (builds and serves the site first)
 
 `.github/workflows/deploy.yml` runs the tests on every push and pull request, then deploys `master` to GitHub Pages.
 In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**.
+
+## GitHub contributions card
+
+The card in the Experience section reads `contributions.json`, written at deploy time by
+`scripts/contributions.mjs` from GitHub's own contribution calendar, so the number and the squares match the
+profile, private contributions included. The workflow also runs daily to keep it fresh.
+
+It needs one repository secret, `GH_CONTRIB_TOKEN`: a personal access token of the profile owner
+(classic token with the `read:user` scope). Without it the card falls back to the public calendar, which only
+counts private work if "Private contributions" is enabled on the GitHub profile.

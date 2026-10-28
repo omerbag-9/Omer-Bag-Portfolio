@@ -7,8 +7,8 @@ type Day = { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 };
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-// Fetched in the visitor's browser. If the contributions service is down, fall back to a chart image,
-// and if that fails too the card hides itself.
+// Prefers contributions.json (written at deploy, includes private work), then the public calendar service,
+// then a chart image; if all fail the card hides itself.
 export default function Contributions() {
   const [days, setDays] = useState<Day[] | null>(null);
   const [reported, setReported] = useState<number | null>(null);
@@ -16,14 +16,22 @@ export default function Contributions() {
 
   useEffect(() => {
     const ctrl = new AbortController();
-    fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`, { signal: ctrl.signal })
+    const show = (list: Day[], total?: number) => {
+      if (!list?.length) throw new Error('empty');
+      setDays(list);
+      if (typeof total === 'number') setReported(total);
+      setMode('grid');
+    };
+    const publicCalendar = () =>
+      fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`, { signal: ctrl.signal })
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((d: { contributions: Day[]; total?: { lastYear?: number } }) => show(d.contributions, d.total?.lastYear));
+    // contributions.json is written at deploy time with the owner's token, so it includes private contributions
+    // and matches the count on github.com; without it, use the public calendar.
+    fetch('./contributions.json', { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d: { contributions: Day[]; total?: { lastYear?: number } }) => {
-        if (!d.contributions?.length) throw new Error('empty');
-        setDays(d.contributions);
-        if (typeof d.total?.lastYear === 'number') setReported(d.total.lastYear);
-        setMode('grid');
-      })
+      .then((d: { contributions: Day[]; total: number }) => show(d.contributions, d.total))
+      .catch(() => (ctrl.signal.aborted ? undefined : publicCalendar()))
       .catch(() => !ctrl.signal.aborted && setMode('image'));
     return () => ctrl.abort();
   }, []);
@@ -47,8 +55,8 @@ export default function Contributions() {
   return (
     <a className="contrib" href={contact.github} target="_blank" rel="noreferrer" aria-label="My GitHub profile">
       <span className="contrib__head">
-        <b>{mode === 'grid' ? `${total} contributions` : 'GitHub activity'}</b>
-        <span>in the last year · @{USER}</span>
+        <b>{mode === 'grid' ? `${total.toLocaleString()} contributions in the last year` : 'GitHub activity'}</b>
+        <span>@{USER} on GitHub</span>
       </span>
 
       {mode === 'grid' && (
@@ -58,9 +66,18 @@ export default function Contributions() {
               <span key={i}>{l}</span>
             ))}
           </span>
+          <span className="contrib__days" aria-hidden="true">
+            <span />
+            <span>Mon</span>
+            <span />
+            <span>Wed</span>
+            <span />
+            <span>Fri</span>
+            <span />
+          </span>
           <span className="contrib__grid" role="img" aria-label={`${total} GitHub contributions in the last year`}>
             {cells.map((d, i) =>
-              d ? <span key={d.date} data-l={d.level} title={`${d.count} on ${d.date}`} /> : <span key={i} data-pad="" />
+              d ? <span key={d.date} data-l={d.level} title={`${d.count || 'No'} contribution${d.count === 1 ? '' : 's'} on ${d.date}`} /> : <span key={i} data-pad="" />
             )}
           </span>
         </span>
